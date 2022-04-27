@@ -98,44 +98,54 @@ var tmdb = {
     
     if (data !== undefined) {
       arraySalvos.push(data);
-      localStorage.setItem("salvos", JSON.stringify(arraySalvos));
     }
+    localStorage.setItem("salvos", JSON.stringify(arraySalvos));
+
     
 
-      for (var i = 0; i < arraySalvos.length; i++) {
-        
-        // criar um elemento li
-        var li = document.createElement("li");
+    for (var i = 0; i < arraySalvos.length; i++) {
+      
+      // criar um elemento li
+      var li = document.createElement("li");
 
-        // criar um elemento img
-        var img = document.createElement("img");
-        img.setAttribute(
-          "src",
-          `https://image.tmdb.org/t/p/w500${arraySalvos[i].poster_path}`
-        );
-        li.appendChild(img);
+      // criar um elemento img
+      var img = document.createElement("img");
+      img.setAttribute(
+        "src",
+        `https://image.tmdb.org/t/p/w500${arraySalvos[i].poster_path}`
+      );
+      li.appendChild(img);
 
-        // span
-        var span = document.createElement("span");
-        var spanText = document.createTextNode(arraySalvos[i].title);
-        span.appendChild(spanText);
-        li.appendChild(span);
+      // span
+      var span = document.createElement("span");
+      var spanText = document.createTextNode(arraySalvos[i].title);
+      span.appendChild(spanText);
+      li.appendChild(span);
 
-        // Paragrafo
-        var description;
-        if (arraySalvos[i].overview == "") {
-          description = "Sem descrição...";
-        } else {
-          description = arraySalvos[i].overview;
-        }
-
-        var paragrafo = document.createElement("p");
-        var paragrafoText = document.createTextNode(description);
-        paragrafo.appendChild(paragrafoText);
-        li.appendChild(paragrafo);
-
-        resultsSalvos.appendChild(li);
+      // Paragrafo
+      var description;
+      if (arraySalvos[i].overview == "") {
+        description = "Sem descrição...";
+      } else {
+        description = arraySalvos[i].overview;
       }
+
+      var paragrafo = document.createElement("p");
+      var paragrafoText = document.createTextNode(description);
+      paragrafo.appendChild(paragrafoText);
+      li.appendChild(paragrafo);
+
+      // botão exclir
+      var button = document.createElement("button");
+      button.innerHTML = "Excluir";
+      button.setAttribute(
+        "onclick",
+        `tmdb.excluir(${JSON.stringify(arraySalvos[i])});`
+      );
+      li.appendChild(button);
+
+      resultsSalvos.appendChild(li);
+    }
   },
 
   limpar: function () {
@@ -148,6 +158,16 @@ var tmdb = {
     // esconder a quantidade de resultados obtidos
     resultTitle.style.display = "none";
   },
+
+  excluir: function(obj) {
+    
+    arraySalvos = arraySalvos.filter(function(item){
+        return item.id !== obj.id;
+    });
+    
+    tmdb.salvar();
+  
+  }
 };
 
 tmdb.salvar();
